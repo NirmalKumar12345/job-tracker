@@ -31,6 +31,7 @@ export const getJob = async(req,res)=>{
        res.status(500).json({error: err.message})
     }
 }
+
 // ✅ GET ALL JOBS (Admin)
 export const getAllAdminJob = async(req,res)=>{
     try
