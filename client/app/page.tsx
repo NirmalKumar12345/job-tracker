@@ -7,11 +7,11 @@ import { LoginForm } from "@/components/loginForm";
 export default function Home() {
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (isAuthenticated()) {
-  //     router.replace("/dashboard");
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (isAuthenticated()) {
+      router.replace("/dashboard");
+    }
+  }, []);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
