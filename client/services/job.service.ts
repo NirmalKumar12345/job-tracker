@@ -2,55 +2,33 @@ import { createJob, deleteJob, getAllJob, getJob, getJobById, updateJob } from "
 import { CreateJobPayload, job } from "@/types/job.types";
 
 export const getJobService = async () => {
-    try {
-        return await getJob();
-    }
-    catch (err: any) {
-        throw err?.response?.data || { msg: "Something went wrong" };
-    }
+        const res=await getJob();
+        return res.data;
 }
 
 export const getAllJobService = async () => {
-    try {
-        return await getAllJob();
-    }
-    catch (err: any) {
-        throw err?.response?.data || { msg: "Something went wrong" };
-    }
+   const res=  await getAllJob();
+   return res.data;
 }
 
 export const getJobByIdService = async (id: string) => {
-    try {
-        return await getJobById(id);
-    }
-    catch (err: any) {
-        throw err?.response?.data || { msg: "Something went wrong" };
-    }
+   const res=  await getJobById(id);
+   return res.data
+   
 }
 
 export const createJobService = async (data: CreateJobPayload) => {
-    try {
-        return await createJob(data);
-    }
-    catch (err: any) {
-        throw err?.response?.data || { msg: "Something went wrong" };
-    }
+   const res=  await createJob(data);
+     return res.data
+    
 }
 
 export const updateJobService = async (id: string, data: Partial<job>) => {
-    try {
-        return await updateJob(id, data);
-    }
-    catch (err: any) {
-        throw err?.response?.data || { msg: "Something went wrong" };
-    }
+   const res =await updateJob(id, data);
+   return res.data
 }
 
 export const deleteJobService = async (id: string) => {
-    try {
-        return await deleteJob(id);
-    }
-    catch (err: any) {
-        throw err?.response?.data || { msg: "Something went wrong" };
-    }
+    const res=await deleteJob(id);
+    return res.data
 }

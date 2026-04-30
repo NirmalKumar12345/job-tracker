@@ -1,22 +1,18 @@
 import { Application } from "@/types/application.types";
 import api from "./axios";
 
-export const getAllApplications = async () => {
-    const res = await api.get('/application/getAll');
-    return res.data;
+export const getAllApplications = () => {
+    return api.get('/application/getAll');
 }
 
-export const applyJob = async (data: FormData) => {
-    const res = await api.post('/application/apply', data, { headers: { "Content-Type": "multipart/form-data" } });
-    return res.data;
+export const applyJob = (data: FormData) => {
+    return api.post('/application/apply', data, { headers: { "Content-Type": "multipart/form-data" } });
 }
 
-export const updateJob = async (id: string, data: Partial<Application>) => {
-    const res = await api.put(`/application/update/${id}`, data);
-    return res.data;
+export const updateJob =  (id: string, data: Partial<Application>) => {
+    return api.put(`/application/update/${id}`, data);
 }
 
-export const getUserApplications = async () => {
-    const res = await api.get('/application/getUser');
-    return res.data;
+export const getUserApplications = () => {
+    return api.get('/application/getUser');
 }

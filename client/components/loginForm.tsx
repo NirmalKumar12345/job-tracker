@@ -97,7 +97,7 @@ export function LoginForm({
                 <div className="flex items-center">
                   <FieldLabel htmlFor="password">Password</FieldLabel>
                 </div>
-                <Input id="password" value={password} placeholder="Enter Password" onChange={(e) => {const value = e.target.value; setPassword(value); const errormsg = validateField("password",value); setError((prev)=>({...prev, password: errormsg}));}} />
+                <Input type='password' id="password" value={password} placeholder="Enter Password" onChange={(e) => {const value = e.target.value; setPassword(value); const errormsg = validateField("password",value); setError((prev)=>({...prev, password: errormsg}));}} />
                 {error.password && <p className="text-sm text-red-500">{error.password}</p>}
               </Field>
               <Field>

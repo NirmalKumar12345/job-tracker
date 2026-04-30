@@ -18,8 +18,8 @@ export const jobValidaionSchema = {
     description: {
         optional: true,
         isLength: {
-            options: { min: 20 },
-            errorMessage: "Description must be at least 20 characters long"
+            options: { min: 10 },
+            errorMessage: "Description must be at least 10 characters long"
         }
     },
     location: {

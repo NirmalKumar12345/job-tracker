@@ -1,3 +1,32 @@
+function decodeToken(): any | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) return null;
+    const trimmed = token.trim();
+    const parts = trimmed.split('.');
+    if (parts.length !== 3) return null;
+    const b64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const json = decodeURIComponent(
+      atob(b64)
+        .split('')
+        .map(function (c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join('')
+    );
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+}
+
+export function getUserRole(): "admin" | "user" | null {
+  const payload = decodeToken();
+  const role = payload?.role;
+  return role === "admin" || role === "user" ? role : null;
+}
+
 export function isAuthenticated(): boolean {
   if (typeof window === "undefined") return false;
   try {

@@ -24,50 +24,92 @@ export default function JobDetails() {
   const handleApply = async () => {
     try {
       if (!resume) {
-      toast.error("Please upload resume");
-      return;
-    }
+        toast.error("Please upload resume");
+        return;
+      }
       const formData = new FormData();
       formData.append("jobId", job._id);
       formData.append("resume", resume);
       const res = await applyJobService(formData);
       toast.success(res.msg);
-      router.push("/dashboard")  
+      router.push("/dashboard")
     }
-    catch(err:any){
-      toast.error(err?.msg || "Login Failed");
+    catch (err: any) {
+      toast.error(err?.response?.data?.msg || "Failed");
     }
   }
   if (!job) return <p>Loading...</p>;
 
   return (
-    <>
-    <div className="p-12 md:p-25 flex-col flex justify-center items-center">
-      <h1 className="text-2xl font-bold">{job.role}</h1>
-      <p className="text-gray-800 font-semibold">{job.company}</p>
+    <div className="min-h-screen bg-gray-50 flex justify-center items-start py-10 px-4">
+  <div className="w-full max-w-3xl bg-white rounded-2xl shadow-md p-6 space-y-6">
 
-      <div className="mt-4 space-y-2">
-        <p>📍 {job.location}</p>
-        <p>💼 {job.experience}</p>
-        <p>{job.description}</p>
-        <p>🛠 Skills: {job.skill}</p>
-        <p>Resume: {!job.isApplied && (
-          <input
-            type="file"
-            accept=".pdf"
-            onChange={(e) => setResume(e.target.files?.[0] || null)}
-          />
-        )}</p>
-      </div>
+    {/* Header */}
+    <div className="border-b pb-4">
+      <h1 className="text-2xl font-bold text-gray-900">{job.role}</h1>
+      <p className="text-gray-600">{job.company}</p>
     </div>
-    <div className="px-10 md:px-90 flex justify-between items-center">
-       <Button className="cursor-pointer bg-white text-black border border-black hover:bg-white" onClick={()=>router.back()} >Cancel</Button>
-        {job.isApplied ? (
-          <Button disabled>Already Applied</Button>
-        ) : (
-          <Button className="cursor-pointer bg-blue-400 hover:bg-blue-600" onClick={handleApply}>Apply Now</Button>
-        )}
+
+    {/* Job Info */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700">
+      <p>📍 <span className="font-medium">{job.location}</span></p>
+      <p>💼 <span className="font-medium">{job.experience}</span></p>
+      <p className="sm:col-span-2">
+        🛠 <span className="font-medium">{job.skill}</span>
+      </p>
+    </div>
+
+    {/* Description */}
+    <div>
+      <h2 className="text-lg font-semibold mb-2">Job Description</h2>
+      <div
+        className="prose max-w-none text-gray-800"
+        dangerouslySetInnerHTML={{ __html: job.description }}
+      />
+    </div>
+
+    {/* Resume Upload */}
+    {!job.isApplied && (
+      <div className="border rounded-lg p-4 bg-gray-50">
+        <label className="block text-sm font-medium mb-2">
+          Upload Resume (PDF)
+        </label>
+
+        <input
+          type="file"
+          accept=".pdf"
+          onChange={(e) => setResume(e.target.files?.[0] || null)}
+          className="block w-full text-sm file:mr-4 file:py-2 file:px-4
+                     file:rounded-md file:border-0
+                     file:bg-blue-500 file:text-white
+                     hover:file:bg-blue-600 cursor-pointer"
+        />
       </div>
-      </>
+    )}
+
+    {/* Actions */}
+    <div className="flex justify-between items-center pt-4 border-t">
+      <Button
+        variant="outline"
+        className="cursor-pointer"
+        onClick={() => router.back()}
+      >
+        Cancel
+      </Button>
+
+      {job.isApplied ? (
+        <Button disabled>Already Applied</Button>
+      ) : (
+        <Button
+          className="cursor-pointer bg-blue-500 hover:bg-blue-600"
+          onClick={handleApply}
+        >
+          Apply Now
+        </Button>
+      )}
+    </div>
+
+  </div>
+</div>
   );
 }
