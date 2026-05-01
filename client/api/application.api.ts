@@ -10,7 +10,7 @@ export const applyJob = (data: FormData) => {
 }
 
 export const updateJob =  (id: string, data: Partial<Application>) => {
-    return api.put(`/application/update/${id}`, data);
+    return api.put(`/application/update/${id}/status`, data);
 }
 
 export const getUserApplications = () => {
