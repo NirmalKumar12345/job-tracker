@@ -62,7 +62,7 @@ export const updateApplicationStatus = async (req, res) => {
 
 export const getUserApplication = async (req, res) => {
   try {
-    const applications = await Application.find({ userId: req.user.id }).populate("jobId", "company role location expiryDate").sort({ createdAt: -1 });
+    const applications = await Application.find({ userId: req.user.id }).populate("userId","name email mobile").populate("jobId", "company role location expiryDate").sort({ createdAt: -1 });
     const baseUrl = `${req.protocol}://${req.get("host")}`;
     const result = applications.map(app => ({
       ...app.toObject(),
