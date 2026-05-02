@@ -72,7 +72,10 @@ export default function UserDashboard({ handleLogout }: { handleLogout: () => vo
         <div className="absolute top-1/2 -left-32 h-96 w-96 rounded-full bg-indigo-300/20 blur-3xl" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto p-4 md:p-6 space-y-6">
+      <div className="relative  p-4 md:p-6">
+        {/* STICKY: hero + tabs pinned to top while card grid scrolls */}
+        <Tabs defaultValue="jobs">
+        <div className="sticky top-0 z-30 -mx-4 md:-mx-6 px-4 md:px-6 -mt-4 md:-mt-6 pt-4 md:pt-6 pb-4 space-y-4 bg-linear-to-br from-slate-50/90 via-blue-50/80 to-purple-50/80 dark:from-slate-950/90 dark:via-slate-900/80 dark:to-indigo-950/80 backdrop-blur-md">
         {/* HERO HEADER */}
         <div className="relative overflow-hidden rounded-2xl bg-linear-to-r from-violet-600 via-indigo-600 to-blue-600 p-6 md:p-8 shadow-xl shadow-indigo-500/20">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.25),transparent_60%)]" />
@@ -123,28 +126,30 @@ export default function UserDashboard({ handleLogout }: { handleLogout: () => vo
           </div>
         </div>
 
-        {/* TABS */}
-        <Tabs defaultValue="jobs" className="space-y-6">
-          <div className="flex justify-center">
-            <TabsList className="bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 p-1 rounded-full shadow-sm">
-              <TabsTrigger
-                value="jobs"
-                className="px-6 cursor-pointer rounded-full data-[state=active]:bg-linear-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all"
-              >
-                <Briefcase className="h-4 w-4 mr-2" />
-                Jobs ({jobs.length})
-              </TabsTrigger>
+        {/* TABS LIST (still inside sticky wrapper) */}
+        <div className="flex justify-center">
+          <TabsList className="bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 p-1 rounded-full shadow-sm">
+            <TabsTrigger
+              value="jobs"
+              className="px-6 cursor-pointer rounded-full data-[state=active]:bg-linear-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all"
+            >
+              <Briefcase className="h-4 w-4 mr-2" />
+              Jobs ({jobs.length})
+            </TabsTrigger>
 
-              <TabsTrigger
-                value="applications"
-                className="px-6 cursor-pointer rounded-full data-[state=active]:bg-linear-to-r data-[state=active]:from-fuchsia-600 data-[state=active]:to-pink-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all"
-              >
-                <ClipboardList className="h-4 w-4 mr-2" />
-                My Applications ({applications.length})
-              </TabsTrigger>
-            </TabsList>
-          </div>
+            <TabsTrigger
+              value="applications"
+              className="px-6 cursor-pointer rounded-full data-[state=active]:bg-linear-to-r data-[state=active]:from-fuchsia-600 data-[state=active]:to-pink-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all"
+            >
+              <ClipboardList className="h-4 w-4 mr-2" />
+              My Applications ({applications.length})
+            </TabsTrigger>
+          </TabsList>
+        </div>
+        </div>
+        {/* end sticky wrapper */}
 
+        <div className="pt-6">
           {/* JOBS TAB */}
           <TabsContent value="jobs">
             {filteredJobs.length > 0 ? (
@@ -174,6 +179,7 @@ export default function UserDashboard({ handleLogout }: { handleLogout: () => vo
           <TabsContent value="applications">
             <UserApplications applications={applications} />
           </TabsContent>
+        </div>
         </Tabs>
       </div>
     </div>
