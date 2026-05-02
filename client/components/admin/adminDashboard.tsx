@@ -105,7 +105,7 @@ export default function AdminDashboard({ handleLogout }: { handleLogout: () => v
         <div className="absolute top-1/3 -left-32 h-96 w-96 rounded-full bg-pink-300/20 blur-3xl" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto p-6 space-y-6">
+      <div className="relative p-6 space-y-6">
         {/* HEADER */}
         <div className="relative overflow-hidden rounded-2xl bg-linear-to-r from-indigo-600 via-blue-600 to-purple-600 p-6 shadow-xl shadow-indigo-500/20">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.25),transparent_60%)]" />
