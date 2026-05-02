@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from "react";
 import { deleteJobService } from "@/services/job.service";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
+
 import {
   Table,
   TableBody,
@@ -23,10 +25,26 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+
 import { Pencil, Trash2 } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 export default function JobTable({ jobs, refresh, onEdit }: any) {
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
+
+  const totalPages = Math.ceil(jobs.length / pageSize);
+
+  const paginatedJobs = jobs.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   const handleDelete = async (id: string) => {
     try {
@@ -39,52 +57,67 @@ export default function JobTable({ jobs, refresh, onEdit }: any) {
   };
 
   return (
-    <div className="rounded-md border">
+    <div className="rounded-xl border shadow-sm p-4 space-y-4">
+
+      {/* 🔹 Top Bar */}
+      <div className="flex justify-between items-center">
+        <p className="text-sm text-muted-foreground">
+          Total Jobs: <span className="font-semibold">{jobs.length}</span>
+        </p>
+      </div>
+
+      {/* 🔹 Table */}
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Company</TableHead>
             <TableHead>Role</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead >Actions</TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
-          {jobs.length > 0 ? (
-            jobs.map((job: any) => (
-              <TableRow key={job._id}>
-                <TableCell className="font-medium">{job.company}</TableCell>
-                <TableCell>{job.role}</TableCell>
+          {paginatedJobs.length > 0 ? (
+            paginatedJobs.map((job: any) => (
+              <TableRow key={job._id} className="hover:bg-muted/50">
 
-                <TableCell className="space-x-2">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        onClick={() => onEdit(job)}
-                        className="cursor-pointer"
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Edit</p>
-                    </TooltipContent>
-                  </Tooltip>
+                <TableCell className="font-medium">
+                  {job.company}
+                </TableCell>
 
+                <TableCell>
+                  {job.role}
+                </TableCell>
+
+                <TableCell className="space-x-3">
+
+                  {/* EDIT */}
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          onClick={() => onEdit(job)}
+                          className="cursor-pointer"
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>Edit</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+
+                  {/* DELETE */}
                   <TooltipProvider>
                     <AlertDialog>
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <AlertDialogTrigger asChild>
                             <button className="cursor-pointer">
-                              <Trash2 className="h-4 w-4" />
+                              <Trash2 className="h-4 w-4 text-red-500" />
                             </button>
                           </AlertDialogTrigger>
                         </TooltipTrigger>
-
-                        <TooltipContent>
-                          <p>Delete</p>
-                        </TooltipContent>
+                        <TooltipContent>Delete</TooltipContent>
                       </Tooltip>
 
                       <AlertDialogContent>
@@ -93,17 +126,16 @@ export default function JobTable({ jobs, refresh, onEdit }: any) {
                             Are you sure?
                           </AlertDialogTitle>
                           <AlertDialogDescription>
-                            This action cannot be undone. This will permanently delete this job.
+                            This will permanently delete this job.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
 
                         <AlertDialogFooter>
-                          <AlertDialogCancel className="cursor-pointer">
+                          <AlertDialogCancel>
                             Cancel
                           </AlertDialogCancel>
 
                           <AlertDialogAction
-                            className="cursor-pointer"
                             onClick={() => handleDelete(job._id)}
                           >
                             Delete
@@ -112,7 +144,9 @@ export default function JobTable({ jobs, refresh, onEdit }: any) {
                       </AlertDialogContent>
                     </AlertDialog>
                   </TooltipProvider>
+
                 </TableCell>
+
               </TableRow>
             ))
           ) : (
@@ -124,6 +158,35 @@ export default function JobTable({ jobs, refresh, onEdit }: any) {
           )}
         </TableBody>
       </Table>
+
+      {/* 🔹 Pagination */}
+      <div className="flex justify-between items-center pt-2">
+
+        <p className="text-sm text-muted-foreground">
+          Page {currentPage} of {totalPages || 1}
+        </p>
+
+        <div className="space-x-2">
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(prev => prev - 1)}
+          >
+            Previous
+          </Button>
+
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={currentPage === totalPages || totalPages === 0}
+            onClick={() => setCurrentPage(prev => prev + 1)}
+          >
+            Next
+          </Button>
+        </div>
+
+      </div>
     </div>
   );
 }

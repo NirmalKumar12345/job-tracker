@@ -83,44 +83,81 @@ export default function JobForm({
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} className="grid gap-2">
+  <div className="min-h-screen flex items-center justify-center bg-muted/40 p-4">
+    <div className="w-full max-w-3xl bg-white dark:bg-background rounded-2xl shadow-lg border p-6 space-y-6">
 
-      <FormInput name="company" label="Company" formik={formik} />
-      <FormInput name="role" label="Role" formik={formik} />
-
-      <div>
-        <label className="text-sm font-medium">Description</label>
-
-        <RichTextEditor
-          value={formik.values.description}
-          onChange={(val: string) => formik.setFieldValue("description", val)}
-        />
-
-        {formik.touched.description && formik.errors.description && (
-          <p className="text-red-500 text-sm">
-            {formik.errors.description as string}
-          </p>
-        )}
+      {/* HEADER */}
+      <div className="border-b pb-4">
+        <h2 className="text-2xl font-bold">
+          {isEdit ? "Edit Job" : "Create Job"}
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Fill in the details to {isEdit ? "update" : "post"} a job
+        </p>
       </div>
 
-      <FormInput name="skill" label="Skill" formik={formik} />
-      <FormInput name="location" label="Location" formik={formik} />
-      <FormInput name="experience" label="Experience" formik={formik} />
+      {/* FORM */}
+      <form onSubmit={formik.handleSubmit} className="space-y-5">
 
-      <FormInput
-        name="expiryDate"
-        label="Expiry Date"
-        type="date"
-        formik={formik}
-      />
-      <div className="flex justify-between pt-3">
-        <Button type="button" className="cursor-pointer" onClick={() => router.push("/dashboard")} variant="outline">
-          Cancel
-        </Button>
-        <Button type="submit" className="cursor-pointer">
-          {isEdit ? "Update" : "Create"}
-        </Button>
-      </div>
-    </form>
-  );
+        {/* BASIC INFO */}
+        <div className="grid md:grid-cols-2 gap-4">
+          <FormInput name="company" label="Company" formik={formik} />
+          <FormInput name="role" label="Role" formik={formik} />
+        </div>
+
+        {/* DESCRIPTION */}
+        <div>
+          <label className="text-sm font-medium mb-2 block">
+            Job Description
+          </label>
+
+          <div className="border rounded-xl p-3 bg-background">
+            <RichTextEditor
+              value={formik.values.description}
+              onChange={(val: string) =>
+                formik.setFieldValue("description", val)
+              }
+            />
+          </div>
+
+          {formik.touched.description && formik.errors.description && (
+            <p className="text-red-500 text-sm mt-1">
+              {formik.errors.description as string}
+            </p>
+          )}
+        </div>
+
+        {/* JOB DETAILS */}
+        <div className="grid md:grid-cols-2 gap-4">
+          <FormInput name="skill" label="Skills Required" formik={formik} />
+          <FormInput name="location" label="Location" formik={formik} />
+          <FormInput name="experience" label="Experience" formik={formik} />
+          <FormInput
+            name="expiryDate"
+            label="Expiry Date"
+            type="date"
+            formik={formik}
+          />
+        </div>
+
+        {/* ACTIONS */}
+        <div className="flex justify-end gap-3 pt-4 border-t">
+          <Button
+            type="button"
+            variant="outline"
+            className="cursor-pointer"
+            onClick={() => router.push("/dashboard")}
+          >
+            Cancel
+          </Button>
+
+          <Button type="submit" className="cursor-pointer px-6">
+            {isEdit ? "Update Job" : "Post Job"}
+          </Button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+);
 }

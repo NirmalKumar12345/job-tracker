@@ -42,38 +42,88 @@ export default function AdminDashboard({ handleLogout }: { handleLogout: () => v
       toast.error(err.message);
     }
   };
-  return (
-    <div className="p-6 space-y-6">
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-        <Button type="button" className="cursor-pointer" onClick={handleLogout}> Logout</Button>
+ return (
+  <div className="min-h-screen bg-muted/40 p-6">
+
+    {/* HEADER */}
+    <div className="max-w-6xl mx-auto space-y-6">
+
+      <div className="flex items-center justify-between bg-white dark:bg-background border rounded-xl px-6 py-4 shadow-sm">
+        <div>
+          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+          <p className="text-sm text-muted-foreground">
+            Manage jobs and applications
+          </p>
+        </div>
+
+        <Button
+          variant="outline"
+          className="cursor-pointer"
+          onClick={handleLogout}
+        >
+          Logout
+        </Button>
       </div>
-      <Tabs defaultValue="jobs">
 
-        <TabsList className="mx-auto flex w-fit p-1">
-          <TabsTrigger value="jobs" className="cursor-pointer">
-            Jobs
-          </TabsTrigger>
-          <TabsTrigger value="applications" className="cursor-pointer">
-            Applications
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="jobs">
-          <div className="flex justify-end py-4">
-            <Button className="cursor-pointer" onClick={handleCreate}>
-              + Create Job
-            </Button>
+      {/* TABS SECTION */}
+      <div className="bg-white dark:bg-background border rounded-xl shadow-sm p-4">
+
+        <Tabs defaultValue="jobs" className="space-y-6">
+
+          {/* CENTERED TAB SWITCH */}
+          <div className="flex justify-center">
+            <TabsList className="bg-muted p-1 rounded-lg">
+              <TabsTrigger value="jobs" className="px-6 cursor-pointer">
+                Jobs
+              </TabsTrigger>
+              <TabsTrigger value="applications" className="px-6 cursor-pointer">
+                Applications
+              </TabsTrigger>
+            </TabsList>
           </div>
-          <JobTable jobs={jobs} onEdit={handleEdit} refresh={fetchJobs} />
-        </TabsContent>
-        <TabsContent value="applications" className="py-4">
-          <ApplicationTable
-            applications={applications}
-            refresh={fetchApplications}
-          />
-        </TabsContent>
 
-      </Tabs>
+          {/* JOBS TAB */}
+          <TabsContent value="jobs" className="space-y-4">
+
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-semibold">Job Listings</h2>
+
+              <Button
+                className="cursor-pointer"
+                onClick={handleCreate}
+              >
+                + Create Job
+              </Button>
+            </div>
+
+            <div className="rounded-xl border overflow-hidden">
+              <JobTable
+                jobs={jobs}
+                onEdit={handleEdit}
+                refresh={fetchJobs}
+              />
+            </div>
+
+          </TabsContent>
+
+          {/* APPLICATION TAB */}
+          <TabsContent value="applications" className="space-y-4">
+
+            <h2 className="text-lg font-semibold">
+              Job Applications
+            </h2>
+
+            <div className="rounded-xl border overflow-hidden">
+              <ApplicationTable
+                applications={applications}
+                refresh={fetchApplications}
+              />
+            </div>
+
+          </TabsContent>
+
+        </Tabs>
+      </div>
     </div>
-  );
-}
+  </div>
+);}
