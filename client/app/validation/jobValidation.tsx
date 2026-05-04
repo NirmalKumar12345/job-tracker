@@ -2,8 +2,11 @@ import { z } from "zod";
 
 export const JobSchema = z.object({
   company: z.string().min(1, "Company is required"),
-  role: z.string().min(1, "Role is required"),
-  description: z.string().min(10, "Minimum 10 characters"),
+  role: z
+    .string()
+    .nonempty("Role is required")
+    .min(5, "Role must be at least 5 characters"),
+  description: z.string().min(1, "Description is required").min(10, "Minimum 10 characters"),
   location: z.string().min(1, "Location is required"),
   experience: z.string().min(1, "Experience is required"),
   expiryDate: z
@@ -15,4 +18,24 @@ export const JobSchema = z.object({
     }, {
       message: "Expiry must be a future date",
     }),
+  salary: z
+    .string()
+    .refine((val) => Number(val) >= 0, {
+      message: "Salary cannot be negative",
+    }),
+  vacancy: z
+  .union([z.string(), z.number()])
+  .optional()
+  .refine((val) => {
+    if (val === undefined || val === "") return true;
+    return Number.isInteger(Number(val));
+  }, {
+    message: "Vacancy must be an integer",
+  })
+  .refine((val) => {
+    if (val === undefined || val === "") return true;
+    return Number(val) >= 1;
+  }, {
+    message: "Vacancy must be at least 1",
+  }),
 });

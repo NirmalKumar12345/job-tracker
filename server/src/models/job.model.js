@@ -14,6 +14,12 @@ const jobSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    salary:{
+        type: String,
+    },
+    vacancy:{
+        type: Number
+    },
     expiryDate: {
         type: Date,
         required: true

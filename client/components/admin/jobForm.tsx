@@ -20,6 +20,8 @@ import {
   GraduationCap,
   CalendarClock,
   Save,
+  IndianRupee,
+  Users,
 } from "lucide-react";
 import TextAreaInput from "../textAreaInput";
 
@@ -66,6 +68,8 @@ export default function JobForm({
       expiryDate: initialValues?.expiryDate
         ? new Date(initialValues.expiryDate).toISOString().split("T")[0]
         : "",
+      salary: initialValues?.salary || "",
+      vacancy: initialValues?.vacancy || ""
     },
 
     enableReinitialize: true,
@@ -75,13 +79,17 @@ export default function JobForm({
     validateOnBlur: true,
 
     onSubmit: async (values) => {
+      const payload = {
+        ...values,
+        vacancy: Number(values.vacancy)
+      };
       try {
         if (isEdit && jobId) {
-          await updateJobService(jobId, values);
+          await updateJobService(jobId, payload);
           toast.success("Job updated");
           router.push("/dashboard");
         } else {
-          await createJobService(values);
+          await createJobService(payload);
           toast.success("Job created");
           router.push("/dashboard");
         }
@@ -262,6 +270,33 @@ export default function JobForm({
                       name="expiryDate"
                       label="Expiry Date"
                       type="date"
+                      formik={formik}
+                    />
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <div className="absolute left-3 top-9 z-10 text-emerald-500 pointer-events-none">
+                    <IndianRupee className="h-4 w-4" />
+                  </div>
+                  <div className="[&_input]:pl-9">
+                    <FormInput
+                      name="salary"
+                      label="Salary (per year)"
+                      formik={formik}
+                    />
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <div className="absolute left-3 top-9 z-10 text-fuchsia-500 pointer-events-none">
+                    <Users className="h-4 w-4" />
+                  </div>
+                  <div className="[&_input]:pl-9">
+                    <FormInput
+                      name="vacancy"
+                      label="Vacancies"
+                      type="number"
                       formik={formik}
                     />
                   </div>
