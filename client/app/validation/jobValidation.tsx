@@ -18,11 +18,6 @@ export const JobSchema = z.object({
     }, {
       message: "Expiry must be a future date",
     }),
-  salary: z
-    .string()
-    .refine((val) => Number(val) >= 0, {
-      message: "Salary cannot be negative",
-    }),
   vacancy: z
   .union([z.string(), z.number()])
   .optional()

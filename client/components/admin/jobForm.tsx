@@ -52,7 +52,8 @@ export default function JobForm({
 
     const errors: any = {};
     result.error.issues.forEach((err) => {
-      errors[err.path[0]] = err.message;
+      const key = err.path[0] as string;
+      if (!errors[key]) errors[key] = err.message;
     });
     return errors;
   };
