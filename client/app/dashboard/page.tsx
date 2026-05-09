@@ -5,14 +5,17 @@ import { useRouter } from "next/navigation";
 import { getUserRole, isAuthenticated } from "@/lib/auth";
 import AdminDashboard from "@/components/admin/adminDashboard";
 import UserDashboard from "@/components/user/userDashboard";
+import { useLoading } from "@/components/loadingProvider";
 
 export default function Dashboard() {
   const router = useRouter();
+  const { show } = useLoading();
   const [role, setRole] = useState<"admin" | "user" | null>(null);
-  const handleLogout = () => {        
-        localStorage.removeItem('token');
-        router.push("/");
-    };
+  const handleLogout = () => {
+    show("Signing out...");
+    localStorage.removeItem('token');
+    router.push("/");
+  };
 
   useEffect(() => {
     if (!isAuthenticated()) {

@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { SignupSchema } from "@/app/validation/authValidation";
+import { useLoading } from "@/components/loadingProvider";
 import {
   User,
   Mail,
@@ -30,6 +31,7 @@ import {
 
 export function SignupForm() {
   const router = useRouter();
+  const { show } = useLoading();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -61,6 +63,7 @@ export function SignupForm() {
     try {
       const res = await SignupUser(form);
       toast.success(res.msg);
+      show("Creating your account...");
       setTimeout(() => {
         router.push("/");
       }, 1500);

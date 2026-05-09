@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 
 export const register = async (req, res) => {
     try {
-        const { name, email, password,mobile,role } = req.body;
+        const { name, email, password, mobile, role } = req.body;
         const exitingUser = await User.findOne({ email });
         if (exitingUser) {
             return res.status(400).json({ error: "User already exists" });

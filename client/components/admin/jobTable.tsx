@@ -211,17 +211,16 @@ export default function JobTable({ jobs, refresh, onEdit }: any) {
               );
             })
           ) : (
-            <TableRow>
+            <TableRow >
               <TableCell
-                colSpan={3}
+                colSpan={5}
                 className="text-center py-12 text-slate-400 dark:text-slate-500"
               >
-                <div className="flex flex-col items-center gap-2">
+                <div className="flex flex-col items-center justify-center gap-2">
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
                     <Briefcase className="h-6 w-6" />
                   </div>
                   <p className="text-sm font-medium">No jobs found</p>
-                  <p className="text-xs">Click "Create Job" to add your first listing</p>
                 </div>
               </TableCell>
             </TableRow>

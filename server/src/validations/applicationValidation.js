@@ -15,8 +15,8 @@ export const updateApplicationValidationSchema = {
             errorMessage: "Status is required"
         },
         isIn:{
-            options: [["Applied","Interview","Rejected","Offer"]],
-            errorMessage: "Status must be one of Applied, Interview, Rejected, Offer"
+            options: [["Applied","Reviewing","Rejected","Shortlisted"]],
+            errorMessage: "Status must be one of Applied, Reviewing, Rejected, Shortlisted"
         }
     }
 }

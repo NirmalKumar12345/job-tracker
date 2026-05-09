@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { applyJobService } from "@/services/application.service";
 import { toast } from "react-toastify";
+import { useLoading } from "@/components/loadingProvider";
 import {
   ArrowLeft,
   MapPin,
@@ -43,14 +44,20 @@ export default function JobDetails() {
   const [job, setJob] = useState<any>(null);
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
+  const { show, hide } = useLoading();
 
   useEffect(() => {
     fetchJob();
   }, []);
 
   const fetchJob = async () => {
-    const res = await getJobByIdService(id as string);
-    setJob(res);
+    show("Loading job...");
+    try {
+      const res = await getJobByIdService(id as string);
+      setJob(res);
+    } finally {
+      hide();
+    }
   };
 
   const handleApply = async () => {
@@ -60,6 +67,7 @@ export default function JobDetails() {
         return;
       }
       setSubmitting(true);
+      show("Submitting application...");
       const formData = new FormData();
       formData.append("jobId", job._id);
       formData.append("resume", resume);
@@ -67,6 +75,7 @@ export default function JobDetails() {
       toast.success(res.msg);
       router.push("/dashboard");
     } catch (err: any) {
+      hide();
       toast.error(err?.response?.data?.msg || "Failed");
     } finally {
       setSubmitting(false);

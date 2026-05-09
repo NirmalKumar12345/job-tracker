@@ -24,6 +24,7 @@ import {
   Users,
 } from "lucide-react";
 import TextAreaInput from "../textAreaInput";
+import { useLoading } from "@/components/loadingProvider";
 
 interface Props {
   initialValues?: any;
@@ -37,6 +38,7 @@ export default function JobForm({
   jobId,
 }: Props) {
   const router = useRouter();
+  const { show, hide } = useLoading();
   const [errors, setErrors] = useState<{
     company?: string;
     role?: string;
@@ -85,6 +87,7 @@ export default function JobForm({
         vacancy: Number(values.vacancy)
       };
       try {
+        show(isEdit ? "Updating job..." : "Creating job...");
         if (isEdit && jobId) {
           await updateJobService(jobId, payload);
           toast.success("Job updated");
@@ -95,6 +98,7 @@ export default function JobForm({
           router.push("/dashboard");
         }
       } catch (err: any) {
+        hide();
         const Errors = err?.errors || err?.response?.data?.errors;
         if (Errors && Array.isArray(Errors)) {
           const fieldError: any = {};

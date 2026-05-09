@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { LoginUser } from "@/services/auth.service";
 import { LoginSchema } from "@/app/validation/authValidation";
+import { useLoading } from "@/components/loadingProvider";
 import {
   Mail,
   Lock,
@@ -24,6 +25,7 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"div">) {
   const router = useRouter();
+  const { show } = useLoading();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -44,6 +46,7 @@ export function LoginForm({
     try {
       const res = await LoginUser({ email, password });
       toast.success(res.msg);
+      show("Signing you in...");
       setTimeout(() => {
         router.push("/dashboard");
       }, 1500);

@@ -15,6 +15,7 @@ import {
   Phone,
   Mail,
   User,
+  ShieldCheck,
 } from "lucide-react";
 
 const AVATAR_GRADIENTS = [
@@ -82,10 +83,10 @@ export default function UserApplications({ applications }: any) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       {applications.map((app: any) => {
+        if (!app.jobId) return null;
         const initial = (app.jobId?.company || "?").trim().charAt(0).toUpperCase();
         const gradient = pickGradient(app.jobId?.company || app._id || "");
         const styles = statusStyles(app.status);
-
         return (
           <Card
             key={app._id}
@@ -134,14 +135,33 @@ export default function UserApplications({ applications }: any) {
                   {app.status}
                 </span>
               </div>
-              <div className="flex flex-col space-y-2">
-                <span className="text-bold">Contact</span>
-                <div className="flex gap-2 items-center"><User className="w-4 h-4"/><span className="text-blue-400 capitalize">{app.userId?.name}</span></div>
-                <div className="flex gap-2 items-center"><Phone className="w-4 h-4" /> <span>{app.userId?.mobile}</span></div>
-                <div className="flex gap-2 items-center"><Mail className="w-4 h-4"/><a href={`mailto:${app.userId?.email}`}
-                  className="text-xs text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:underline">{app.userId?.email}</a>
+              {app.jobId?.createdBy && (
+                <div className="flex flex-col space-y-2 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/30 p-3">
+                  <div className="flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-indigo-500" />
+                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                      Recruiter
+                    </span>
+                  </div>
+                  <div className="flex gap-2 items-center text-slate-700 dark:text-slate-200">
+                    <User className="w-4 h-4 text-slate-400" />
+                    <span className="capitalize font-medium">{app.jobId.createdBy.name}</span>
+                  </div>
+                  <div className="flex gap-2 items-center text-slate-700 dark:text-slate-200">
+                    <Phone className="w-4 h-4 text-slate-400" />
+                    <span>{app.jobId.createdBy.mobile}</span>
+                  </div>
+                  <div className="flex gap-2 items-center">
+                    <Mail className="w-4 h-4 text-slate-400" />
+                    <a
+                      href={`mailto:${app.jobId.createdBy.email}`}
+                      className="text-xs text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:underline truncate"
+                    >
+                      {app.jobId.createdBy.email}
+                    </a>
+                  </div>
                 </div>
-              </div>
+              )}
             </CardContent>
 
             {/* FOOTER */}

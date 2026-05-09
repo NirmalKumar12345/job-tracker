@@ -8,6 +8,8 @@ import { Button } from "../ui/button";
 import { getUserApplicationsService } from "@/services/application.service";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import UserApplications from "./userApplication";
+import { useLoading } from "@/components/loadingProvider";
+import { useRouter } from "next/navigation";
 import {
   Briefcase,
   ClipboardList,
@@ -15,17 +17,29 @@ import {
   Search,
   Sparkles,
   Rocket,
+  UserCircle,
 } from "lucide-react";
 
 export default function UserDashboard({ handleLogout }: { handleLogout: () => void }) {
   const [jobs, setJobs] = useState<any[]>([]);
   const [applications, setApplications] = useState<any[]>([]);
   const [query, setQuery] = useState("");
+  const { show, hide } = useLoading();
+  const router = useRouter();
 
   useEffect(() => {
-    fetchJobs();
-    fetchApplications();
+    (async () => {
+      show("Loading jobs...");
+      try {
+        await Promise.all([fetchJobs(), fetchApplications()]);
+      } finally {
+        hide();
+      }
+    })();
   }, []);
+  const validApplications = applications.filter(
+  (app: any) => app.jobId
+);
 
   const fetchJobs = async () => {
     try {
@@ -102,15 +116,29 @@ export default function UserDashboard({ handleLogout }: { handleLogout: () => vo
               </div>
             </div>
 
-            <Button
-              variant="secondary"
-              type="button"
-              className="cursor-pointer bg-white/95 hover:bg-white text-indigo-700 font-medium shadow-md self-start md:self-auto"
-              onClick={handleLogout}
-            >
-              <LogOut className="h-4 w-4 mr-2" />
-              Logout
-            </Button>
+            <div className="flex items-center gap-2 self-start md:self-auto">
+              <Button
+                variant="secondary"
+                type="button"
+                className="cursor-pointer bg-white/15 hover:bg-white/25 text-white font-medium ring-1 ring-white/30 backdrop-blur-sm shadow-md"
+                onClick={() => {
+                  show("Opening profile...");
+                  router.push("/profile");
+                }}
+              >
+                <UserCircle className="h-4 w-4 mr-2" />
+                Profile
+              </Button>
+              <Button
+                variant="secondary"
+                type="button"
+                className="cursor-pointer bg-white/95 hover:bg-white text-indigo-700 font-medium shadow-md"
+                onClick={handleLogout}
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
+            </div>
           </div>
 
           {/* Search bar */}
@@ -142,7 +170,7 @@ export default function UserDashboard({ handleLogout }: { handleLogout: () => vo
               className="px-6 cursor-pointer rounded-full data-[state=active]:bg-linear-to-r data-[state=active]:from-fuchsia-600 data-[state=active]:to-pink-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all"
             >
               <ClipboardList className="h-4 w-4 mr-2" />
-              My Applications ({applications.length})
+              My Applications ({validApplications.length})
             </TabsTrigger>
           </TabsList>
         </div>

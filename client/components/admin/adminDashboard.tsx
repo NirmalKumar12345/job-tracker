@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { getAllApplicationsServices } from "@/services/application.service";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import ApplicationTable from "./applicationTable";
+import { useLoading } from "@/components/loadingProvider";
 import {
   Briefcase,
   Users,
@@ -17,24 +18,34 @@ import {
   LogOut,
   Plus,
   LayoutDashboard,
+  UserCircle,
 } from "lucide-react";
 
 export default function AdminDashboard({ handleLogout }: { handleLogout: () => void }) {
   const [jobs, setJobs] = useState<any[]>([]);
   const [applications, setApplications] = useState<any[]>([]);
   const router = useRouter();
+  const { show, hide } = useLoading();
 
   const handleCreate = () => {
+    show("Opening job form...");
     router.push("/dashboard/jobs");
   };
 
   const handleEdit = (job: any) => {
+    show("Loading job...");
     router.push(`/dashboard/jobs/${job._id}`);
   };
 
   useEffect(() => {
-    fetchJobs();
-    fetchApplications();
+    (async () => {
+      show("Loading dashboard...");
+      try {
+        await Promise.all([fetchJobs(), fetchApplications()]);
+      } finally {
+        hide();
+      }
+    })();
   }, []);
 
   const fetchJobs = async () => {
@@ -124,14 +135,28 @@ export default function AdminDashboard({ handleLogout }: { handleLogout: () => v
               </div>
             </div>
 
-            <Button
-              variant="secondary"
-              className="cursor-pointer bg-white/95 hover:bg-white text-indigo-700 font-medium shadow-md"
-              onClick={handleLogout}
-            >
-              <LogOut className="h-4 w-4 mr-2" />
-              Logout
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="secondary"
+                type="button"
+                className="cursor-pointer bg-white/15 hover:bg-white/25 text-white font-medium ring-1 ring-white/30 backdrop-blur-sm shadow-md"
+                onClick={() => {
+                  show("Opening profile...");
+                  router.push("/profile");
+                }}
+              >
+                <UserCircle className="h-4 w-4 mr-2" />
+                Profile
+              </Button>
+              <Button
+                variant="secondary"
+                className="cursor-pointer bg-white/95 hover:bg-white text-indigo-700 font-medium shadow-md"
+                onClick={handleLogout}
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
 

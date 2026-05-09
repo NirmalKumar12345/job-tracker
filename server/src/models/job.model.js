@@ -14,10 +14,10 @@ const jobSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    salary:{
+    salary: {
         type: String,
     },
-    vacancy:{
+    vacancy: {
         type: Number
     },
     expiryDate: {
@@ -25,7 +25,7 @@ const jobSchema = new mongoose.Schema({
         required: true
     },
     skill: String,
-    experience:{
+    experience: {
         type: String,
         required: true
     },
@@ -33,6 +33,6 @@ const jobSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     }
-},{timestamps: true});
+}, { timestamps: true });
 
-export default mongoose.model("Job",jobSchema);
+export default mongoose.model("Job", jobSchema);

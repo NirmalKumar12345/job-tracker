@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import JobForm from "@/components/admin/jobForm";
 import { getJobByIdService } from "@/services/job.service";
 import { toast } from "react-toastify";
+import LoadingOverlay from "@/components/loadingOverlay";
 
 export default function JobPage() {
   const params = useParams();
@@ -34,7 +35,7 @@ export default function JobPage() {
     }
   };
 
-  if (jobId && loading) return <p>Loading...</p>;
+  if (jobId && loading) return <LoadingOverlay text="Loading job details..." />;
 
   return (
     <div>

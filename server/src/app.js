@@ -3,6 +3,7 @@ import cors from 'cors';
 import authRoutes from './routes/authRouter.js'
 import jobRoutes from './routes/jobRouter.js'
 import applicationRoutes from './routes/applicationRouter.js'
+import profileRoutes from './routes/profileRoutes.js'
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.use('/api/auth',authRoutes);
 app.use('/api/job',jobRoutes);
 
 app.use('/api/application',applicationRoutes);
+
+app.use('/api/profile',profileRoutes);
 
 app.use("/uploads",express.static("uploads"));
 
