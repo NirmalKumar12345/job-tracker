@@ -13,12 +13,13 @@ import { useLoading } from "@/components/loadingProvider";
 import {
   Briefcase,
   Users,
-  CalendarCheck,
   Trophy,
   LogOut,
   Plus,
   LayoutDashboard,
   UserCircle,
+  Eye,
+  XCircle,
 } from "lucide-react";
 
 export default function AdminDashboard({ handleLogout }: { handleLogout: () => void }) {
@@ -66,11 +67,11 @@ export default function AdminDashboard({ handleLogout }: { handleLogout: () => v
     }
   };
 
-  const interviewCount = applications.filter(
-    (a: any) => a.status?.toLowerCase() === "interview"
+  const reviewCount = applications.filter(
+    (a: any) => a.status?.toLowerCase() === "reviewing"
   ).length;
-  const offerCount = applications.filter(
-    (a: any) => a.status?.toLowerCase() === "offer"
+  const shortlistedCount = applications.filter(
+    (a: any) => a.status?.toLowerCase() === "shortlisted"
   ).length;
 
   const stats = [
@@ -91,16 +92,24 @@ export default function AdminDashboard({ handleLogout }: { handleLogout: () => v
       text: "text-pink-600",
     },
     {
-      label: "Interviews",
-      value: interviewCount,
-      icon: CalendarCheck,
+      label: "Review",
+      value: reviewCount,
+      icon: Eye,
       gradient: "from-amber-500 to-orange-600",
       ring: "ring-amber-100",
       text: "text-amber-600",
     },
     {
-      label: "Offers Made",
-      value: offerCount,
+      label: "Rejected",
+      value: applications.length - reviewCount - shortlistedCount,
+      icon: XCircle,
+      gradient: "from-rose-500 to-red-600",
+      ring: "ring-rose-100",
+      text: "text-rose-600",
+    },
+    {
+      label: "Shortlisted",
+      value: shortlistedCount,
       icon: Trophy,
       gradient: "from-emerald-500 to-teal-600",
       ring: "ring-emerald-100",
@@ -161,7 +170,7 @@ export default function AdminDashboard({ handleLogout }: { handleLogout: () => v
         </div>
 
         {/* STATS */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
           {stats.map((s) => {
             const Icon = s.icon;
             return (

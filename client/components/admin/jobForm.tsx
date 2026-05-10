@@ -129,7 +129,7 @@ export default function JobForm({
           className="cursor-pointer inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Dashboard
+          Back
         </button>
 
         {/* Hero header */}
@@ -310,7 +310,7 @@ export default function JobForm({
             </div>
 
             {/* ACTIONS */}
-            <div className="flex justify-end gap-3 px-6 md:px-7 py-4 bg-linear-to-r from-slate-50 to-indigo-50/50 dark:from-slate-800/40 dark:to-slate-800/20 border-t border-slate-100 dark:border-slate-800">
+            <div className="flex justify-between px-6 md:px-7 py-4 bg-linear-to-r from-slate-50 to-indigo-50/50 dark:from-slate-800/40 dark:to-slate-800/20 border-t border-slate-100 dark:border-slate-800">
               <Button
                 type="button"
                 variant="outline"

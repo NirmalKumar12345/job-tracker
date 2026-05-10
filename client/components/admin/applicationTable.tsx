@@ -11,7 +11,6 @@ import {
   TableRow,
 } from "../ui/table";
 
-import { updateJobService } from "@/services/application.service";
 import {
   Phone,
   FileText,
@@ -25,6 +24,7 @@ import {
   Eye,
   BadgeCheck,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const AVATAR_GRADIENTS = [
   "from-indigo-500 to-blue-600",
@@ -69,6 +69,7 @@ const statusStyles = (status: string) => {
 export default function ApplicationTable({ applications, refresh }: any) {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5;
+  const router = useRouter();
 
   const totalPages = Math.ceil(applications.length / pageSize);
 
@@ -77,14 +78,6 @@ export default function ApplicationTable({ applications, refresh }: any) {
     currentPage * pageSize
   );
 
-  const handleStatusChange = async (id: string, status: string) => {
-    try {
-      await updateJobService(id, { status });
-      refresh();
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   return (
     <div className="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
@@ -123,7 +116,7 @@ export default function ApplicationTable({ applications, refresh }: any) {
               <TableHead className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                 Resume
               </TableHead>
-              <TableHead className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-right">
+              <TableHead className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                 Action
               </TableHead>
             </TableRow>
@@ -136,11 +129,6 @@ export default function ApplicationTable({ applications, refresh }: any) {
                 const initial = name.trim().charAt(0).toUpperCase();
                 const gradient = pickGradient(app.userId?._id || name);
                 const styles = statusStyles(app.status);
-                const isShortlisted = app.status === "Shortlisted";
-                const isRejected = app.status === "Rejected";
-                const isReviewing = app.status === "Reviewing";
-
-                const isFinalStatus = isReviewing ||isShortlisted || isRejected;
                 return (
                   <TableRow
                     key={app._id}
@@ -206,37 +194,14 @@ export default function ApplicationTable({ applications, refresh }: any) {
                     </TableCell>
 
                     <TableCell>
-                      <div className="flex items-center justify-end gap-1.5">
+                      <div className="flex items-center gap-2">
                         <Button
                           size="sm"
-                          variant="outline"
-                          disabled={isFinalStatus}
-                          className="cursor-pointer h-8 border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 hover:text-amber-800 dark:bg-amber-950/30 dark:border-amber-800/50 dark:text-amber-300"
-                          onClick={() => handleStatusChange(app._id, "Reviewing")}
+                          className="cursor-pointer h-8 bg-linear-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white shadow-sm"
+                          onClick={() => router.push(`/applications/${app._id}`)}
                         >
                           <Eye className="h-3.5 w-3.5 mr-1" />
-                          {app.status === "Reviewing" ? "Reviewing" : "Review"}
-                        </Button>
-
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          disabled={isFinalStatus}
-                          className="cursor-pointer h-8 border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800 dark:bg-rose-950/30 dark:border-rose-800/50 dark:text-rose-300"
-                          onClick={() => handleStatusChange(app._id, "Rejected")}
-                        >
-                          <XCircle className="h-3.5 w-3.5 mr-1" />
-                         {isRejected ? "Rejected" : "Reject"}
-                        </Button>
-
-                        <Button
-                          size="sm"
-                          disabled={isFinalStatus}
-                          className="cursor-pointer h-8 bg-linear-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-sm"
-                          onClick={() => handleStatusChange(app._id, "Shortlisted")}
-                        >
-                          <BadgeCheck className="h-3.5 w-3.5 mr-1" />
-                         {isShortlisted ? "Shortlisted" : "Shortlist"}
+                          View Profile
                         </Button>
                       </div>
                     </TableCell>
