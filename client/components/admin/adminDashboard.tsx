@@ -170,7 +170,7 @@ export default function AdminDashboard({ handleLogout }: { handleLogout: () => v
         </div>
 
         {/* STATS */}
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
           {stats.map((s) => {
             const Icon = s.icon;
             return (
