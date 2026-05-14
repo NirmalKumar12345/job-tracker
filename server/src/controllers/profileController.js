@@ -39,7 +39,6 @@ export const updateProfile = async (req, res) => {
         }
         await user.save();
 
-        const baseUrl = `${req.protocol}://${req.get("host")}`;
 
         let profile = {
             _id: user._id,
@@ -48,9 +47,7 @@ export const updateProfile = async (req, res) => {
             mobile: user.mobile,
             role: user.role,
 
-            profilePic: user.profilePic
-                ? `${baseUrl}/${user.profilePic}`
-                : null,
+            profilePic: user.profilePic || null,
         };
         if (user.role === "user") {
             profile = {
@@ -66,9 +63,7 @@ export const updateProfile = async (req, res) => {
                 skills: user.skills,
                 language: user.language,
 
-                resume: user.resume
-                    ? `${baseUrl}/${user.resume}`
-                    : null,
+                resume: user.resume || null,
             };
         }
         res.status(200).json({
@@ -91,7 +86,6 @@ export const getProfile = async (req, res) => {
                 message: "User not found"
             });
         }
-        const baseUrl = `${req.protocol}://${req.get("host")}`;
         let profile = {
             _id: user._id,
             name: user.name,
@@ -99,9 +93,7 @@ export const getProfile = async (req, res) => {
             mobile: user.mobile,
             role: user.role,
 
-            profilePic: user.profilePic
-                ? `${baseUrl}/${user.profilePic}`
-                : null,
+            profilePic: user.profilePic || null,
         };
 
         if (user.role === "user") {
@@ -117,10 +109,7 @@ export const getProfile = async (req, res) => {
                 language: user.language,
                 education: user.education,
                 currentCompany: user.currentCompany,
-
-                resume: user.resume
-                    ? `${baseUrl}/${user.resume}`
-                    : null,
+                resume: user.resume || null,
             };
         }
         res.status(200).json(profile);

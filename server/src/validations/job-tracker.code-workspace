@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../../../../../MEARN Projects/blogapp_frontend"
+		},
+		{
+			"path": "../../../../../MEARN Projects/blogApp_backend"
 		}
 	],
 	"settings": {}

@@ -221,7 +221,7 @@ export function SignupForm() {
             <Input
               id="mobile"
               value={form.mobile}
-              placeholder="9876543210"
+              placeholder="e.g. +1234567890"
               className="pl-9"
               onChange={(e) => {
                 const value = e.target.value;

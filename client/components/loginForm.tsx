@@ -46,7 +46,7 @@ export function LoginForm({
     try {
       const res = await LoginUser({ email, password });
       toast.success(res.msg);
-      show("Signing you in...");
+      show("Logging you in...");
       setTimeout(() => {
         router.push("/dashboard");
       }, 1500);

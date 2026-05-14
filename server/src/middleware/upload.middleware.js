@@ -1,23 +1,34 @@
-import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
+import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../config/cloudinary.js";
 
-const storage = multer.diskStorage({
-    destination: function( req,file,cb){
-        let uploadPath = "uploads/";
-        if (file.fieldname === "resume") {
-            uploadPath += "resumes/";
-        } else if (file.fieldname === "profilePic") {
-            uploadPath += "profiles/";
-        }
-        fs.mkdirSync(uploadPath, { recursive: true });
-        cb(null, uploadPath);
-    },
-    filename: function(req,file,cb){
-        cb(null,Date.now()+ "-" + file.fieldname +path.extname(file.originalname));
+const storage = new CloudinaryStorage({
+  cloudinary,
+
+  params: async (req, file) => {
+    if (file.fieldname === "resume") {
+      return {
+        folder: "jobportal/resumes",
+        resource_type: "image",
+        format: "pdf",
+        use_filename: true,
+        unique_filename: true,
+      };
     }
-})
 
-const upload = multer({storage});
+    if (file.fieldname === "profilePic") {
+      return {
+        folder: "jobportal/profilePics",
+        resource_type: "image",
+      };
+    }
+
+    return {
+      folder: "jobportal",
+    };
+  },
+});
+
+const upload = multer({ storage });
 
 export default upload;

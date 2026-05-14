@@ -6,19 +6,10 @@ export const getAllApplications = async (req, res) => {
     const jobs = await Job.find({ createdBy: req.user.id });
     const jobIds = jobs.map(job => job._id);
     const applications = await Application.find({ jobId: { $in: jobIds } }).populate("userId", "name email mobile experience skills location currentCTC expectedCTC resume language education currentCompany noticePeriod profilePic role").populate("jobId", "company role");
-    const baseUrl = `${req.protocol}://${req.get("host")}`;
-    const result = applications.map(app => ({
-      ...app.toObject(),
-      resume: app.resume ? `${baseUrl}/${app.resume}` : null,
-      userId: app.userId ?{
-        ...app.userId.toObject(),
-        profilePic: app.userId.profilePic ? `${baseUrl}/${app.userId.profilePic}` : null,
-        resume: app.userId.resume
-              ? `${baseUrl}/${app.userId.resume}`
-              : null,
-      }:null
-    }))
-    res.status(200).json({ total: applications.length, applications: result })
+    res.status(200).json({
+      total: applications.length,
+      applications,
+    });
   }
   catch (err) {
     res.status(500).json({ error: err.message })
@@ -80,13 +71,10 @@ export const getUserApplication = async (req, res) => {
         },
       })
       .sort({ createdAt: -1 });
-    const baseUrl = `${req.protocol}://${req.get("host")}`;
-    const result = applications.map(app => ({
-      ...app.toObject(),
-      resume: app.resume ? `${baseUrl}/${app.resume}` : null
-    }))
-
-    res.status(200).json({ total: result.length, applications: result })
+    res.status(200).json({
+      total: applications.length,
+      applications,
+    });
   }
   catch (err) {
     res.status(500).json({ error: err.message })
