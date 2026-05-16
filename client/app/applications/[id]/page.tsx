@@ -29,6 +29,7 @@ import {
     Sparkles,
     ShieldCheck,
 } from "lucide-react";
+import Image from "next/image";
 
 const AVATAR_GRADIENTS = [
     "from-indigo-500 to-blue-600",
@@ -188,7 +189,9 @@ export default function ApplicationDetailPage() {
                     <div className="relative flex flex-col md:flex-row md:items-center gap-5">
                         <div className="relative shrink-0">
                             {u.profilePic ? (
-                                <img
+                                <Image
+                                    width={500}
+                                    height={500}
                                     src={u.profilePic}
                                     alt={u.name}
                                     className="h-20 w-20 rounded-full object-cover ring-4 ring-white/40 shadow-md"

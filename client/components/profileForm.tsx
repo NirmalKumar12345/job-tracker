@@ -26,6 +26,7 @@ import {
 import ProfileInfo from "./profile/profileInfo";
 import CareerDetail from "./profile/carrerDetail";
 import ResumeUpload from "./profile/resumeUpload";
+import Image from "next/image";
 
 type FilePicker = File | string | null;
 
@@ -205,7 +206,9 @@ export default function ProfileForm() {
             <div className="relative">
               {picPreview ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <Image
+                  width={500}
+                  height={500}
                   src={picPreview}
                   alt="Profile"
                   className="h-20 w-20 rounded-full object-cover ring-4 ring-white/40 shadow-md"
