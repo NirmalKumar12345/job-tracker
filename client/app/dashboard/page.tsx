@@ -18,12 +18,13 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
+    show("Loading dashboard...");
     if (!isAuthenticated()) {
       router.replace("/dashboard");
       return;
     }
     setRole(getUserRole());
-  }, [router]);
+  }, [router, show]);
 
   if (role === null) return null;
   if (role === "admin") return <AdminDashboard handleLogout={handleLogout}/>;

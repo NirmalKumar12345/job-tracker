@@ -30,14 +30,24 @@ export default function LoadingProvider({ children }: { children: ReactNode }) {
   const [active, setActive] = useState(false);
   const [text, setText] = useState<string | undefined>();
   const pathname = usePathname();
+
+  // Always-current pathname (refs update synchronously during render).
+  const pathnameRef = useRef(pathname);
+  pathnameRef.current = pathname;
+
+  // Which path "owns" the current overlay — i.e. which page called show()
+  // most recently. If null, no one owns it and an auto-hide is safe.
+  const ownerPathRef = useRef<string | null>(null);
   const firstRender = useRef(true);
 
   const show = useCallback((t?: string) => {
+    ownerPathRef.current = pathnameRef.current;
     setText(t);
     setActive(true);
   }, []);
 
   const hide = useCallback(() => {
+    ownerPathRef.current = null;
     setActive(false);
   }, []);
 
@@ -53,13 +63,18 @@ export default function LoadingProvider({ children }: { children: ReactNode }) {
     [show, hide]
   );
 
-  // Auto-hide once the destination route mounts.
   useEffect(() => {
     if (firstRender.current) {
       firstRender.current = false;
       return;
     }
-    setActive(false);
+    const t = setTimeout(() => {
+      if (ownerPathRef.current !== pathnameRef.current) {
+        ownerPathRef.current = null;
+        setActive(false);
+      }
+    }, 150);
+    return () => clearTimeout(t);
   }, [pathname]);
 
   return (
