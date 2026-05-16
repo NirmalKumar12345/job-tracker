@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useEditor, EditorContent, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
 import {
   Bold,
   Italic,
@@ -50,9 +49,11 @@ function ToolbarButton({
   return (
     <button
       type="button"
-      onClick={onClick}
-      disabled={disabled}
       title={title}
+      disabled={disabled}
+      // Prevent the editor from losing focus / selection on mousedown.
+      onMouseDown={(e) => e.preventDefault()}
+      onClick={onClick}
       className={cn(
         'h-8 w-8 inline-flex items-center justify-center rounded text-sm transition-colors cursor-pointer',
         'hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed',
@@ -68,10 +69,16 @@ function Divider() {
   return <span className="mx-1 h-6 w-px bg-border" />;
 }
 
-function Toolbar({ editor, fullscreen, onToggleFullscreen }: {
+function Toolbar({
+  editor,
+  fullscreen,
+  onToggleFullscreen,
+  onPrint,
+}: {
   editor: Editor;
   fullscreen: boolean;
   onToggleFullscreen: () => void;
+  onPrint: () => void;
 }) {
   const transformSelection = (fn: (s: string) => string) => {
     const { from, to, empty } = editor.state.selection;
@@ -214,7 +221,7 @@ function Toolbar({ editor, fullscreen, onToggleFullscreen }: {
         <RemoveFormatting className="h-4 w-4" />
       </ToolbarButton>
 
-      <ToolbarButton title="Print" onClick={() => window.print()}>
+      <ToolbarButton title="Print" onClick={onPrint}>
         <Printer className="h-4 w-4" />
       </ToolbarButton>
 
@@ -252,9 +259,12 @@ function Toolbar({ editor, fullscreen, onToggleFullscreen }: {
 
 export default function RichTextEditor({ value, onChange }: Props) {
   const [fullscreen, setFullscreen] = useState(false);
+  // Tracks the last HTML the editor itself emitted, so we can ignore echoes
+  // from the parent (which would otherwise reset selection on every keystroke).
+  const lastEmitted = useRef<string>(value || '');
 
   const editor = useEditor({
-    extensions: [StarterKit, Underline],
+    extensions: [StarterKit],
     content: value || '',
     immediatelyRender: false,
     editorProps: {
@@ -264,23 +274,65 @@ export default function RichTextEditor({ value, onChange }: Props) {
       },
     },
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      const html = editor.getHTML();
+      lastEmitted.current = html;
+      onChange(html);
     },
   });
 
+  // Only re-set content when an EXTERNAL change comes in (parent reset the
+  // value, edit mode loaded data, etc.) — not when the new value is just our
+  // own emission echoing back.
   useEffect(() => {
     if (!editor) return;
-    if (value !== editor.getHTML()) {
-      editor.commands.setContent(value || '', { emitUpdate: false });
-    }
+    const incoming = value || '';
+    if (incoming === lastEmitted.current) return;
+    if (incoming === editor.getHTML()) return;
+    lastEmitted.current = incoming;
+    editor.commands.setContent(incoming, { emitUpdate: false });
   }, [value, editor]);
+
+  // Lock body scroll while in fullscreen.
+  useEffect(() => {
+    if (!fullscreen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [fullscreen]);
+
+  const printContent = () => {
+    if (!editor) return;
+    const html = editor.getHTML();
+    const doc = `<!doctype html><html><head><title>Print</title>
+      <style>body{font-family:system-ui,sans-serif;padding:24px;line-height:1.5;}
+      h1,h2,h3{margin:0.5em 0}pre{background:#f4f4f4;padding:8px;border-radius:4px}
+      blockquote{border-left:3px solid #ddd;padding-left:12px;color:#555}</style>
+      </head><body>${html}</body></html>`;
+
+    const iframe = document.createElement('iframe');
+    iframe.style.position = 'fixed';
+    iframe.style.right = '0';
+    iframe.style.bottom = '0';
+    iframe.style.width = '0';
+    iframe.style.height = '0';
+    iframe.style.border = '0';
+    iframe.srcdoc = doc;
+    iframe.onload = () => {
+      iframe.contentWindow?.focus();
+      iframe.contentWindow?.print();
+      setTimeout(() => iframe.remove(), 500);
+    };
+    document.body.appendChild(iframe);
+  };
 
   if (!editor) return null;
 
   return (
     <div
       className={cn(
-        'rounded-md border bg-background',
+        'rounded-md border bg-background flex flex-col',
         fullscreen && 'fixed inset-0 z-50 rounded-none',
       )}
     >
@@ -288,10 +340,14 @@ export default function RichTextEditor({ value, onChange }: Props) {
         editor={editor}
         fullscreen={fullscreen}
         onToggleFullscreen={() => setFullscreen((f) => !f)}
+        onPrint={printContent}
       />
       <EditorContent
         editor={editor}
-        className={cn(fullscreen && 'h-[calc(100vh-50px)] overflow-y-auto')}
+        className={cn(
+          'flex-1 min-h-0',
+          fullscreen ? 'overflow-y-auto' : 'overflow-y-auto max-h-[60vh]',
+        )}
       />
     </div>
   );
