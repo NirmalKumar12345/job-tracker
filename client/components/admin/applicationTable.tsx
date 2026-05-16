@@ -231,8 +231,8 @@ export default function ApplicationTable({ applications, refresh }: any) {
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between px-5 py-3 border-t border-slate-200/70 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20">
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-4 sm:px-5 py-3 border-t border-slate-200/70 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20">
+        <p className="text-sm text-slate-500 dark:text-slate-400 whitespace-nowrap">
           Page{" "}
           <span className="font-semibold text-slate-700 dark:text-slate-200">
             {currentPage}

@@ -7,7 +7,14 @@ export const JobSchema = z.object({
     .nonempty("Role is required")
     .min(5, "Role must be at least 5 characters"),
   description: z.string().min(1, "Description is required").min(10, "Minimum 10 characters"),
+  skill: z.string().min(1,"Skills is Required"),
   location: z.string().min(1, "Location is required"),
+  jobType: z
+    .string()
+    .nonempty("Job Type is required")
+    .refine((val) => ["full-time", "part-time", "internship", "contract"].includes(val), {
+      message: "Job Type must be one of full-time, part-time, internship, or contract",
+    }),
   experience: z.string().min(1, "Experience is required"),
   expiryDate: z
     .string()

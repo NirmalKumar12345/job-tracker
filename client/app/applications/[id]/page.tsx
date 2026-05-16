@@ -240,8 +240,11 @@ export default function ApplicationDetailPage() {
                             </span>
                         </div>
                     </div>
+                    <div className="text-xs text-white pt-2 md:pt-0 dark:text-slate-400 text-left md:text-right">
+                        Applied on {fmtDate(app.createdAt)}
+                    </div>
                 </div>
-                
+
 
                 {/* APPLIED FOR */}
                 <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-sm overflow-hidden">
@@ -467,7 +470,7 @@ export default function ApplicationDetailPage() {
                         )}
                     </div>
                 </div>
-<div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-sm p-4">
+                <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-sm p-4">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div>
                             <p className="text-sm font-semibold text-slate-900 dark:text-white">
@@ -477,31 +480,34 @@ export default function ApplicationDetailPage() {
                                 Move this application through the pipeline
                             </p>
                         </div>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
+
                             <Button
                                 size="sm"
                                 variant="outline"
                                 disabled={updating || isFinal}
-                                className="cursor-pointer h-9 border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 hover:text-amber-800"
+                                className="w-full sm:w-auto cursor-pointer h-9 border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 hover:text-amber-800"
                                 onClick={() => setStatus("Reviewing")}
                             >
                                 <Eye className="h-4 w-4 mr-1.5" />
                                 Review
                             </Button>
+
                             <Button
                                 size="sm"
                                 disabled={updating || isFinal}
-                                className="cursor-pointer h-9 bg-linear-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white"
+                                className="w-full sm:w-auto cursor-pointer h-9 bg-linear-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white"
                                 onClick={() => setStatus("Shortlisted")}
                             >
                                 <CheckCircle2 className="h-4 w-4 mr-1.5" />
                                 Shortlist
                             </Button>
+
                             <Button
                                 size="sm"
                                 variant="outline"
                                 disabled={updating || isFinal}
-                                className="cursor-pointer h-9 border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800"
+                                className="w-full sm:w-auto cursor-pointer h-9 border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 hover:text-rose-800"
                                 onClick={() => setStatus("Rejected")}
                             >
                                 <XCircle className="h-4 w-4 mr-1.5" />
@@ -510,8 +516,8 @@ export default function ApplicationDetailPage() {
                         </div>
                     </div>
                 </div>
-                <div className="text-xs text-slate-500 dark:text-slate-400 text-right pb-4">
-                    Applied on {fmtDate(app.createdAt)}
+                <div className="flex justify-center sm:justify-end">
+                    <Button variant={"outline"} onClick={() => router.back()} className="cursor-pointer w-full sm:w-auto">Back</Button>
                 </div>
             </div>
         </div>

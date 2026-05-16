@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { isAuthenticated } from "@/lib/auth";
 import { LoginForm } from "@/components/loginForm";
@@ -10,10 +10,19 @@ import {
   Trophy,
   Sparkles,
 } from "lucide-react";
+import { toast } from "react-toastify";
 
 export default function Home() {
   const router = useRouter();
-
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (localStorage.getItem('sessionExpired')) {
+      toast.error('Session expired');
+      setTimeout(() => {
+        localStorage.removeItem('sessionExpired');
+      }, 500);
+    }
+  }, []);
   useEffect(() => {
     if (isAuthenticated()) {
       router.replace("/dashboard");

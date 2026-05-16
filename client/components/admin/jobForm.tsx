@@ -25,6 +25,8 @@ import {
 } from "lucide-react";
 import TextAreaInput from "../textAreaInput";
 import { useLoading } from "@/components/loadingProvider";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Label } from "../ui/label";
 
 interface Props {
   initialValues?: any;
@@ -46,6 +48,7 @@ export default function JobForm({
     location?: string;
     experience?: string;
     expiryDate?: string;
+    jobType?: string;
   }>({});
 
   const validateWithZod = (values: any) => {
@@ -68,6 +71,7 @@ export default function JobForm({
       location: initialValues?.location || "",
       experience: initialValues?.experience || "",
       skill: initialValues?.skill || "",
+      jobType: initialValues?.jobType || "",
       expiryDate: initialValues?.expiryDate
         ? new Date(initialValues.expiryDate).toISOString().split("T")[0]
         : "",
@@ -177,8 +181,32 @@ export default function JobForm({
               </div>
 
               <div className="grid md:grid-cols-2 gap-4">
-                <FormInput name="company" label="Company" formik={formik} />
-                <FormInput name="role" label="Role" formik={formik} />
+                <FormInput name="company" label="Company" formik={formik} isRequired={true} />
+                <FormInput name="role" label="Role" formik={formik} isRequired={true} />
+              </div>
+              <div className="pt-4">
+                <div className="flex gap-1 mb-1">
+                  <Label htmlFor="jobType">Job Type</Label>
+                  <span className="text-red-500">*</span>
+                </div>
+                <Select value={formik.values.jobType} name="jobType" onValueChange={(value) => formik.setFieldValue("jobType", value)}>
+                  <SelectTrigger className="w-full md:w-103 cursor-pointer">
+                    <SelectValue placeholder="Select Job Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="full-time" className="cursor-pointer">Full-time</SelectItem>
+                      <SelectItem value="part-time" className="cursor-pointer">Part-time</SelectItem>
+                      <SelectItem value="internship" className="cursor-pointer">Internship</SelectItem>
+                      <SelectItem value="contract" className="cursor-pointer">Contract</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                {formik.touched.jobType && formik.errors.jobType && (
+                  <p className="text-rose-500 text-sm mt-1">
+                    {formik.errors.jobType as string}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -189,9 +217,11 @@ export default function JobForm({
                   <FileText className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
-                    Job Description
-                  </h3>
+                  <div className="flex gap-1">
+                    <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
+                      Job Description
+                    </h3> <span className="text-red-500">*</span>
+                  </div>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
                     Responsibilities, expectations and benefits
                   </p>
@@ -240,6 +270,7 @@ export default function JobForm({
                       name="skill"
                       label="Skills Required"
                       formik={formik}
+                      isRequired={true}
                     />
                   </div>
                 </div>
@@ -249,7 +280,7 @@ export default function JobForm({
                     <MapPin className="h-4 w-4" />
                   </div>
                   <div className="[&_input]:pl-9">
-                    <FormInput name="location" label="Location" formik={formik} />
+                    <FormInput name="location" label="Location" formik={formik} isRequired={true} />
                   </div>
                 </div>
 
@@ -262,6 +293,7 @@ export default function JobForm({
                       name="experience"
                       label="Experience"
                       formik={formik}
+                      isRequired={true}
                     />
                   </div>
                 </div>
@@ -276,6 +308,7 @@ export default function JobForm({
                       label="Expiry Date"
                       type="date"
                       formik={formik}
+                      isRequired={true}
                     />
                   </div>
                 </div>

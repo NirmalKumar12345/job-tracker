@@ -193,7 +193,7 @@ export default function ProfileForm() {
           className="cursor-pointer inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Dashboard
+          Back
         </button>
 
         {/* Hero */}

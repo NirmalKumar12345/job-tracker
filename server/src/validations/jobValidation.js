@@ -28,6 +28,15 @@ export const jobValidaionSchema = {
         },
         trim: true
     },
+    jobType:{
+        notEmpty: {
+            errorMessage: "Job Type is required"
+        },
+        isIn: {
+            options: [["full-time", "part-time", "internship","contract"]],
+            errorMessage: "Job Type must be one of full-time, part-time,internship or contract"
+        }
+    },
     expiryDate: {
         notEmpty: {
             errorMessage: "ExpiryDate is required"

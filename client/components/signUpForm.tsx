@@ -108,7 +108,7 @@ export function SignupForm() {
             htmlFor="name"
             className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5"
           >
-            Full Name
+            Full Name <span className="text-red-500">*</span>
           </label>
           <div className="relative">
             <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
@@ -139,7 +139,7 @@ export function SignupForm() {
             htmlFor="email"
             className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5"
           >
-            Email
+            Email <span className="text-red-500">*</span>
           </label>
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
@@ -171,7 +171,7 @@ export function SignupForm() {
             htmlFor="password"
             className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5"
           >
-            Password
+            Password <span className="text-red-500">*</span>
           </label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
@@ -214,7 +214,7 @@ export function SignupForm() {
             htmlFor="mobile"
             className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5"
           >
-            Mobile Number
+            Mobile Number <span className="text-red-500">*</span>
           </label>
           <div className="relative">
             <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
@@ -245,7 +245,7 @@ export function SignupForm() {
             htmlFor="role"
             className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5"
           >
-            I am a
+            I am a <span className="text-red-500">*</span>
           </label>
           <div className="relative">
             <ShieldCheck className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none z-10" />

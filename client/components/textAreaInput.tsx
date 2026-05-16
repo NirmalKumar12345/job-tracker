@@ -6,6 +6,7 @@ interface Props {
   name: string;
   label?: string;
   placeholder?: string;
+  isRequired?: boolean;
   formik: any;
 }
 
@@ -13,6 +14,7 @@ export default function FormTextarea({
   name,
   label,
   placeholder,
+  isRequired,
   formik
 }: Props) {
 
@@ -21,7 +23,11 @@ export default function FormTextarea({
   return (
     <div className="flex flex-col gap-1">
 
-      {label && <label className="text-sm font-medium">{label}</label>}
+      {label && <div className="flex gap-1">
+        <label className="text-sm font-medium">
+          {label} {isRequired ? <span className="text-red-500">*</span> : null}
+        </label>
+      </div>}
 
       <Textarea
         name={name}

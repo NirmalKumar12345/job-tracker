@@ -7,6 +7,7 @@ interface Props {
   label?: string;
   type?: string;
   placeholder?: string;
+  isRequired?: boolean;
   formik: any;
 }
 
@@ -15,6 +16,7 @@ export default function FormInput({
   label,
   type = "text",
   placeholder,
+  isRequired,
   formik
 }: Props) {
 
@@ -24,9 +26,11 @@ export default function FormInput({
     <div className="flex flex-col gap-1">
 
       {label && (
+        <div className="flex gap-1">
         <label className="text-sm font-medium">
-          {label}
+          {label} {isRequired ? <span className="text-red-500">*</span>: null }
         </label>
+        </div>
       )}
 
       <Input
