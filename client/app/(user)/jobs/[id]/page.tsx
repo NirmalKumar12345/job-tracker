@@ -82,21 +82,10 @@ export default function JobDetails() {
     }
   };
 
-  if (!job) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-50 via-blue-50/40 to-indigo-50/60">
-        <div className="flex items-center gap-2 text-indigo-600">
-          <Loader2 className="h-5 w-5 animate-spin" />
-          <span className="text-sm font-medium">Loading job...</span>
-        </div>
-      </div>
-    );
-  }
 
-  const isExpired = job.expiryDate && new Date(job.expiryDate) < new Date();
-  const initial = (job.company || "?").trim().charAt(0).toUpperCase();
-  const gradient = pickGradient(job.company || job._id || "");
-
+  const isExpired = job?.expiryDate && new Date(job?.expiryDate) < new Date();
+  const initial = (job?.company || "?").trim().charAt(0).toUpperCase();
+  const gradient = pickGradient(job?.company || job?._id || "");
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50/40 to-indigo-50/60 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/40 p-4 md:p-6">
       {/* Decorative blobs */}
@@ -134,15 +123,15 @@ export default function JobDetails() {
                 </span>
               </div>
               <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight mt-1">
-                {job.role}
+                {job?.role}
               </h1>
               <div className="flex items-center gap-1.5 text-sm text-white/90 mt-1">
                 <Building2 className="h-3.5 w-3.5" />
-                <span>{job.company}</span>
+                <span>{job?.company}</span>
               </div>
             </div>
 
-            {job.isApplied && (
+            {job?.isApplied && (
               <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-200 self-start md:self-auto">
                 <CheckCircle2 className="h-3.5 w-3.5" />
                 Applied
@@ -167,7 +156,7 @@ export default function JobDetails() {
                 Location
               </p>
               <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
-                {job.location}
+                {job?.location}
               </p>
             </div>
           </div>
@@ -181,7 +170,7 @@ export default function JobDetails() {
                 Experience
               </p>
               <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
-                {job.experience}
+                {job?.experience}
               </p>
             </div>
           </div>
@@ -195,12 +184,12 @@ export default function JobDetails() {
                 Skills
               </p>
               <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
-                {job.skill}
+                {job?.skill}
               </p>
             </div>
           </div>
 
-          {job.expiryDate && (
+          {job?.expiryDate && (
             <div className="flex items-center gap-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 p-3 shadow-sm">
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400">
                 <CalendarClock className="h-4 w-4" />
@@ -210,7 +199,7 @@ export default function JobDetails() {
                   Expires
                 </p>
                 <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
-                  {new Date(job.expiryDate).toLocaleDateString()}
+                  {new Date(job?.expiryDate).toLocaleDateString()}
                 </p>
               </div>
             </div>
@@ -229,12 +218,12 @@ export default function JobDetails() {
           </div>
           <div
             className="prose dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 px-6 py-5"
-            dangerouslySetInnerHTML={{ __html: job.description }}
+            dangerouslySetInnerHTML={{ __html: job?.description }}
           />
         </div>
 
         {/* Resume upload */}
-        {!job.isApplied && !isExpired && (
+        {!job?.isApplied && !isExpired && (
           <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-sm overflow-hidden">
             <div className="flex items-center gap-3 px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-linear-to-r from-emerald-50 to-teal-50 dark:from-slate-800/40 dark:to-slate-800/20">
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-linear-to-br from-emerald-500 to-teal-600 text-white shadow-sm">
@@ -300,7 +289,7 @@ export default function JobDetails() {
             Cancel
           </Button>
 
-          {job.isApplied ? (
+          {job?.isApplied ? (
             <Button
               disabled
               className="bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300"
