@@ -298,7 +298,7 @@ export default function RichTextEditor({ value, onChange }: Props) {
     editorProps: {
       attributes: {
         class:
-          'prose prose-sm max-w-none min-h-[200px] p-3 focus:outline-none dark:prose-invert',
+          'max-w-none min-h-[200px] p-3 focus:outline-none text-sm text-slate-800 dark:text-slate-100',
       },
     },
     onUpdate: ({ editor }) => {
