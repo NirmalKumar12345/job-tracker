@@ -72,7 +72,7 @@ export default function ProfileForm() {
       role: "user" as "user" | "admin",
       location: "",
       experience: "",
-      education: "",
+      education: [""],
       currentCompany: "",
       currentCTC: "",
       expectedCTC: "",
@@ -95,7 +95,9 @@ export default function ProfileForm() {
         if (values.role === "user") {
           formData.append("location", values.location || "");
           formData.append("experience", values.experience || "");
-          formData.append("education", values.education || "");
+          values.education.forEach((edu: string) => {
+            formData.append("education", edu);
+          });
           formData.append("currentCompany", values.currentCompany || "");
           formData.append("currentCTC", values.currentCTC || "");
           formData.append("expectedCTC", values.expectedCTC || "");
@@ -131,7 +133,11 @@ export default function ProfileForm() {
           role: (data.role as "user" | "admin") || "user",
           location: data.location || "",
           experience: data.experience || "",
-          education: data.education || "",
+          education: Array.isArray(data.education)
+            ? data.education
+            : data.education
+              ? [data.education]
+              : [""],
           currentCompany: data.currentCompany || "",
           currentCTC: data.currentCTC || "",
           expectedCTC: data.expectedCTC || "",
@@ -303,7 +309,7 @@ export default function ProfileForm() {
             {/* CAREER (user only) */}
             {isUser && (
               <TabsContent value="career">
-                <CareerDetail formik={formik}/>
+                <CareerDetail formik={formik} />
               </TabsContent>
             )}
 

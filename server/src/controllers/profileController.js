@@ -15,12 +15,15 @@ export const updateProfile = async (req, res) => {
         if (user.role === "user") {
             user.location = req.body.location || user.location;
             user.experience = req.body.experience || user.experience;
-            user.education = req.body.education || user.education;
             user.currentCompany = req.body.currentCompany || user.currentCompany;
             user.currentCTC = req.body.currentCTC || user.currentCTC;
             user.expectedCTC = req.body.expectedCTC || user.expectedCTC;
             user.noticePeriod = req.body.noticePeriod || user.noticePeriod;
-
+            if (req.body.education) {
+                user.education = (Array.isArray(req.body.education)
+                    ? req.body.education
+                    : [req.body.education]).filter(edu => edu.trim() !== "");
+            }
             if (req.body.skills) {
                 user.skills = Array.isArray(req.body.skills)
                     ? req.body.skills

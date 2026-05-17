@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useEditor, EditorContent, Editor } from '@tiptap/react';
+import { useEditor, useEditorState, EditorContent, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import {
   Bold,
@@ -56,8 +56,8 @@ function ToolbarButton({
       onClick={onClick}
       className={cn(
         'h-8 w-8 inline-flex items-center justify-center rounded text-sm transition-colors cursor-pointer',
-        'hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed',
-        active && 'bg-muted text-foreground',
+        'hover:bg-black hover:text-white disabled:opacity-40 disabled:cursor-not-allowed',
+        active && 'bg-black text-white hover:bg-black',
       )}
     >
       {children}
@@ -80,6 +80,32 @@ function Toolbar({
   onToggleFullscreen: () => void;
   onPrint: () => void;
 }) {
+  // Subscribe to editor state so toolbar buttons re-render on every
+  // selection / transaction — without this, isActive() reads stale state
+  // when the user selects existing text and clicks a format button.
+  const state = useEditorState({
+    editor,
+    selector: ({ editor: ed }) => {
+      if (!ed) return null;
+      return {
+        isBold: ed.isActive('bold'),
+        isItalic: ed.isActive('italic'),
+        isUnderline: ed.isActive('underline'),
+        isStrike: ed.isActive('strike'),
+        isH1: ed.isActive('heading', { level: 1 }),
+        isH2: ed.isActive('heading', { level: 2 }),
+        isH3: ed.isActive('heading', { level: 3 }),
+        isBulletList: ed.isActive('bulletList'),
+        isOrderedList: ed.isActive('orderedList'),
+        isBlockquote: ed.isActive('blockquote'),
+        isCode: ed.isActive('code'),
+        isCodeBlock: ed.isActive('codeBlock'),
+        canUndo: ed.can().undo(),
+        canRedo: ed.can().redo(),
+      };
+    },
+  });
+
   const transformSelection = (fn: (s: string) => string) => {
     const { from, to, empty } = editor.state.selection;
     if (empty) return;
@@ -87,11 +113,13 @@ function Toolbar({
     editor.chain().focus().insertContentAt({ from, to }, fn(text)).run();
   };
 
+  if (!state) return null;
+
   return (
     <div className="flex flex-wrap items-center gap-0.5 border-b bg-muted/30 p-1">
       <ToolbarButton
         title="Bold"
-        active={editor.isActive('bold')}
+        active={state.isBold}
         onClick={() => editor.chain().focus().toggleBold().run()}
       >
         <Bold className="h-4 w-4" />
@@ -99,7 +127,7 @@ function Toolbar({
 
       <ToolbarButton
         title="Italic"
-        active={editor.isActive('italic')}
+        active={state.isItalic}
         onClick={() => editor.chain().focus().toggleItalic().run()}
       >
         <Italic className="h-4 w-4" />
@@ -107,7 +135,7 @@ function Toolbar({
 
       <ToolbarButton
         title="Underline"
-        active={editor.isActive('underline')}
+        active={state.isUnderline}
         onClick={() => editor.chain().focus().toggleUnderline().run()}
       >
         <UnderlineIcon className="h-4 w-4" />
@@ -115,7 +143,7 @@ function Toolbar({
 
       <ToolbarButton
         title="Strikethrough"
-        active={editor.isActive('strike')}
+        active={state.isStrike}
         onClick={() => editor.chain().focus().toggleStrike().run()}
       >
         <Strikethrough className="h-4 w-4" />
@@ -141,7 +169,7 @@ function Toolbar({
 
       <ToolbarButton
         title="Heading 1"
-        active={editor.isActive('heading', { level: 1 })}
+        active={state.isH1}
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
       >
         <Heading1 className="h-4 w-4" />
@@ -149,7 +177,7 @@ function Toolbar({
 
       <ToolbarButton
         title="Heading 2"
-        active={editor.isActive('heading', { level: 2 })}
+        active={state.isH2}
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
       >
         <Heading2 className="h-4 w-4" />
@@ -157,7 +185,7 @@ function Toolbar({
 
       <ToolbarButton
         title="Heading 3"
-        active={editor.isActive('heading', { level: 3 })}
+        active={state.isH3}
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
       >
         <Heading3 className="h-4 w-4" />
@@ -167,7 +195,7 @@ function Toolbar({
 
       <ToolbarButton
         title="Bullet List"
-        active={editor.isActive('bulletList')}
+        active={state.isBulletList}
         onClick={() => editor.chain().focus().toggleBulletList().run()}
       >
         <List className="h-4 w-4" />
@@ -175,7 +203,7 @@ function Toolbar({
 
       <ToolbarButton
         title="Ordered List"
-        active={editor.isActive('orderedList')}
+        active={state.isOrderedList}
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
       >
         <ListOrdered className="h-4 w-4" />
@@ -183,7 +211,7 @@ function Toolbar({
 
       <ToolbarButton
         title="Quote"
-        active={editor.isActive('blockquote')}
+        active={state.isBlockquote}
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
       >
         <Quote className="h-4 w-4" />
@@ -191,7 +219,7 @@ function Toolbar({
 
       <ToolbarButton
         title="Inline Code"
-        active={editor.isActive('code')}
+        active={state.isCode}
         onClick={() => editor.chain().focus().toggleCode().run()}
       >
         <Code className="h-4 w-4" />
@@ -199,7 +227,7 @@ function Toolbar({
 
       <ToolbarButton
         title="Code Block"
-        active={editor.isActive('codeBlock')}
+        active={state.isCodeBlock}
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
       >
         <Code2 className="h-4 w-4" />
@@ -240,7 +268,7 @@ function Toolbar({
 
       <ToolbarButton
         title="Undo"
-        disabled={!editor.can().undo()}
+        disabled={!state.canUndo}
         onClick={() => editor.chain().focus().undo().run()}
       >
         <Undo2 className="h-4 w-4" />
@@ -248,7 +276,7 @@ function Toolbar({
 
       <ToolbarButton
         title="Redo"
-        disabled={!editor.can().redo()}
+        disabled={!state.canRedo}
         onClick={() => editor.chain().focus().redo().run()}
       >
         <Redo2 className="h-4 w-4" />

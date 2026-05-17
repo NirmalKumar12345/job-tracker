@@ -59,10 +59,9 @@ const userSchema = new mongoose.Schema({
         },
     ],
 
-    education: {
+    education: [ {
         type: String,
-    },
-
+    }],
     currentCompany: {
         type: String,
     },

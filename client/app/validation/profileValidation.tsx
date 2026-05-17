@@ -25,7 +25,7 @@ const userSchema = z.object({
   role: z.literal("user"),
   location: z.string().optional().or(z.literal("")),
   experience: z.string().optional().or(z.literal("")),
-  education: z.string().optional().or(z.literal("")),
+  education: z.array(z.string()).optional(),
   currentCompany: z.string().optional().or(z.literal("")),
   currentCTC: z.string().optional().or(z.literal("")),
   expectedCTC: z.string().optional().or(z.literal("")),

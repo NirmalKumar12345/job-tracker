@@ -2,8 +2,9 @@ import { Briefcase, Building2, Clock, GraduationCap, IndianRupee, Languages, Map
 import FormInput from "../formInput";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import MultipleInputField from "../multipleInput";
 
-export default function CareerDetail({formik}:{formik:any}) {
+export default function CareerDetail({ formik }: { formik: any }) {
     return (
         <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-sm overflow-hidden">
             <div className="p-6 md:p-7">
@@ -48,17 +49,16 @@ export default function CareerDetail({formik}:{formik:any}) {
                         </div>
                     </div>
 
-                    <div className="relative">
-                        <div className="absolute left-3 top-9 z-10 text-amber-500 pointer-events-none">
-                            <GraduationCap className="h-4 w-4" />
-                        </div>
-                        <div className="[&_input]:pl-9">
-                            <FormInput
-                                name="education"
-                                label="Education"
-                                formik={formik}
-                            />
-                        </div>
+                    <div>
+                        <MultipleInputField
+                            label="Education"
+                            values={formik.values.education}
+                            onChange={(vals) =>
+                                formik.setFieldValue("education", vals)
+                            }
+                            placeholder="Enter education"
+                            icon={<GraduationCap className="h-4 w-4 text-amber-500" />}
+                        />
                     </div>
 
                     <div className="relative">
