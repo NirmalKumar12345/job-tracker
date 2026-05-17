@@ -70,6 +70,9 @@ export default function AdminDashboard({ handleLogout }: { handleLogout: () => v
   const reviewCount = applications.filter(
     (a: any) => a.status?.toLowerCase() === "reviewing"
   ).length;
+  const rejectedCount = applications.filter(
+    (a: any) => a.status?.toLowerCase() === "rejected"
+  ).length;
   const shortlistedCount = applications.filter(
     (a: any) => a.status?.toLowerCase() === "shortlisted"
   ).length;
@@ -101,7 +104,7 @@ export default function AdminDashboard({ handleLogout }: { handleLogout: () => v
     },
     {
       label: "Rejected",
-      value: applications.length - reviewCount - shortlistedCount,
+      value: rejectedCount,
       icon: XCircle,
       gradient: "from-rose-500 to-red-600",
       ring: "ring-rose-100",

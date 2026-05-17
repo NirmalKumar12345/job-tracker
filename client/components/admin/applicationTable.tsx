@@ -43,17 +43,17 @@ const pickGradient = (key: string) => {
 };
 const statusStyles = (status: string) => {
   switch ((status || "").toLowerCase()) {
-    case "offer":
+    case "Shortlisted":
       return {
         wrap: "bg-emerald-50 text-emerald-700 ring-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:ring-emerald-800/60",
         dot: "bg-emerald-500",
       };
-    case "rejected":
+    case "Rejected":
       return {
         wrap: "bg-rose-50 text-rose-700 ring-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:ring-rose-800/60",
         dot: "bg-rose-500",
       };
-    case "interview":
+    case "Reviewing":
       return {
         wrap: "bg-amber-50 text-amber-700 ring-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:ring-amber-800/60",
         dot: "bg-amber-500",

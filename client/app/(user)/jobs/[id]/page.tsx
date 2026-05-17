@@ -20,6 +20,7 @@ import {
   Building2,
   Loader2,
   Sparkles,
+  Clock3,
 } from "lucide-react";
 
 const AVATAR_GRADIENTS = [
@@ -146,7 +147,7 @@ export default function JobDetails() {
         </div>
 
         {/* Info chips */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3">
           <div className="flex items-center gap-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 p-3 shadow-sm">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400">
               <MapPin className="h-4 w-4" />
@@ -179,16 +180,30 @@ export default function JobDetails() {
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-50 dark:bg-violet-950/30 text-violet-600 dark:text-violet-400">
               <Wrench className="h-4 w-4" />
             </div>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {job?.skill?.split(",").map((skill: string, index: number) => (
+                <span
+                  key={index}
+                  className="rounded-full bg-violet-50 dark:bg-violet-950/40 px-2.5 py-1 text-xs font-medium text-violet-700 dark:text-violet-300 ring-1 ring-violet-200/60 dark:ring-violet-800/60"
+                >
+                  {skill.trim()}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center gap-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 p-3 shadow-sm">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-50 dark:bg-violet-950/30 text-violet-600 dark:text-violet-400">
+              <Clock3 className="h-4 w-4" />
+            </div>
             <div className="min-w-0">
               <p className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                Skills
+                Job Type
               </p>
-              <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
-                {job?.skill}
+              <p className="text-sm font-semibold lowercase first-letter:uppercase text-slate-900 dark:text-white truncate">
+                {job?.jobType}
               </p>
             </div>
           </div>
-
           {job?.expiryDate && (
             <div className="flex items-center gap-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 p-3 shadow-sm">
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400">
