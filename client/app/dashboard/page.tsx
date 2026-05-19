@@ -27,6 +27,6 @@ export default function Dashboard() {
   }, [router, show]);
 
   if (role === null) return null;
-  if (role === "admin") return <AdminDashboard handleLogout={handleLogout}/>;
-  return <UserDashboard handleLogout={handleLogout}/>;
+  if (role === "admin") return <AdminDashboard handleLogout={handleLogout} />;
+  return <UserDashboard handleLogout={handleLogout} />;
 }
