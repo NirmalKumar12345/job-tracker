@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import "./globals.css";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import LoadingProvider from "@/components/loadingProvider";
 
@@ -34,6 +35,7 @@ export default function RootLayout({
           <TooltipProvider>{children}</TooltipProvider>
         </LoadingProvider>
         <ToastContainer position="bottom-right" autoClose={3000} />
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />
       </body>
     </html>
   );
